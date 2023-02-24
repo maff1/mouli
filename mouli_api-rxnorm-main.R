@@ -10,9 +10,19 @@
 #' @export
 #'
 #' @examples
-#' get_approximate_match("Piribedil", 2)
+#' get_approximate_match(c("Piribedil","zocor"), 2)
 
 get_approximate_match <- function(rx_string, max_entries) {
   check_internet()
-  parse_rx_name(httr::GET(paste0(base_url, "approximateTerm?term=", rx_string, "&maxEntries=", max_entries)))
+  cols_order = c("rxcui", "rxaui", "score", "rank", "name", "source")
+  for(rx in 1:length(rx_string)) {
+    df <- parse_rx_name(httr::GET(
+      paste0(
+        base_url, "approximateTerm.json?term=", rx_string[rx], "&maxEntries=", max_entries
+        )
+      )
+    )[, cols_order]
+    write.table(df, file="rxfile.txt", append=TRUE, row.names = F)
+  Sys.sleep(1)
+  }
 }

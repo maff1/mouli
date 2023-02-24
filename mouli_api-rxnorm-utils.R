@@ -15,15 +15,8 @@ parse_rx_name <- function(x) {
     return(NA_character_)
   }
   
-  res <- httr::content(x, "parse")
-  lapply(res$approximateGroup$candidate,
-         function(x) {
-           c(x$rxcui,
-             x$rxaui,
-             x$score,
-             x$rank,
-             x$name,
-             x$source
-           )
-         })[[1]]
+  res <- httr::content(x, "text", encoding = "utf-8")
+  as.data.frame(
+    jsonlite::fromJSON(res)[["approximateGroup"]][["candidate"]]
+  )
 }
