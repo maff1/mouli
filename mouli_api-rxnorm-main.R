@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-#' get_approximate_match(c("marco","maarco","zocor","levodopa"), 2)
+#' get_approximate_match("Amlodipin % ., &'", 2)
 
 get_approximate_match <- function(rx_string, max_entries) {
   check_internet()
@@ -17,7 +17,7 @@ get_approximate_match <- function(rx_string, max_entries) {
     df <- cbind(rx_string[rx],
       parse_rx_name(httr::GET(
       paste0(
-        base_url, "approximateTerm.json?term=", rx_string[rx], "&maxEntries=", max_entries
+        base_url, "approximateTerm.json?term=", root_rx_names(rx_string[rx]), "&maxEntries=", max_entries
         )
       )
     )[, cols_order])

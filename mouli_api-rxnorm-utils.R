@@ -11,12 +11,17 @@ check_status <- function(x) {
   httr::status_code(x) == "200"
 }
 
+# space, dash, parenthesis, dot, forward slash are allowed 
+root_rx_names <- function(rx) {
+  sv <- tolower(gsub("\\%|\\(|\\)|\\.|\\,|\\&|\\:|\\'", "", rx))
+trimws(sv, which = "both") 
+}
+
 parse_rx_name <- function(x) {
   if (!check_status(x)) {
     return(NA_character_)
   }
   res <- httr::content(x, "text", encoding = "utf-8")
-  print(jsonlite::fromJSON(res))
   if(length(jsonlite::fromJSON(res)[["approximateGroup"]]) >1 && 
      length(names(
        jsonlite::fromJSON(res)[["approximateGroup"]][["candidate"]]
