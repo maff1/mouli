@@ -9,11 +9,10 @@
 #' @export
 #'
 #' @examples
-#' get_approximate_match(c("Piribedil","zocor", "levodopa"), 2)
+#' get_approximate_match(c("marco","maarco","zocor","levodopa"), 2)
 
 get_approximate_match <- function(rx_string, max_entries) {
   check_internet()
-  cols_order = c("rxcui", "rxaui", "score", "rank", "name", "source")
   for(rx in 1:length(rx_string)) {
     df <- cbind(rx_string[rx],
       parse_rx_name(httr::GET(
@@ -32,7 +31,3 @@ get_approximate_match <- function(rx_string, max_entries) {
   Sys.sleep(1)
   }
 }
-
-
-
-
